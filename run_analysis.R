@@ -90,4 +90,36 @@ subset_data$activity <- factor(subset_data$activity,
 
 subset_data$activity <- tolower(subset_data$activity)
 
-# Step 4: Labeling the data set with descriptive variable names.
+# Step 4: Labeling the data set with descriptive variable names
+
+# "tBodyAcc-std()-X" is an example of current, rather confusing variable names.
+
+# Following changes are performed:
+# - t is replaced with Time
+# - f is replaced with Freq
+# - BodyBody is replaced with Body
+# - mean is replaced with Mean
+# - std is replaced with Std
+# - "()" and "-" symbols are removed
+# - to save space abbreviations "Acc" (accelerometer), "Gyro" (gyroscope) and "Mag" (magnitude) are untouched
+
+names(subset_data) <- gsub("^t", "Time", names(subset_data))
+names(subset_data) <- gsub("^f", "Freq", names(subset_data))
+names(subset_data) <- gsub("BodyBody", "Body", names(subset_data))
+names(subset_data) <- gsub("mean", "Mean", names(subset_data))
+names(subset_data) <- gsub("std", "Std", names(subset_data))
+names(subset_data) <- gsub("\\(\\)", "", names(subset_data))
+names(subset_data) <- gsub("\\-", "", names(subset_data))
+
+# Step 5: Creating a second, independent tidy data set
+# with the average of each variable for each activity and each subject
+
+# group data by subject and activity and count mean for each variable
+
+tidy_data <- subset_data %>%
+  group_by(subject, activity) %>%
+  summarise_all(list(mean = mean))
+
+# create text file consisting of the tidy data set
+
+write.table(tidy_data, "tidy_data.txt", row.name=FALSE)
