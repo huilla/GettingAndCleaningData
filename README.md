@@ -38,7 +38,7 @@ The step 5 of run_analysis.R script creates a second, independent tidy data set 
 Here is a code reading the file back into R:
 
 data <- read.table(file_path, header = TRUE)
-View(data)
+  View(data)
 
 ## Code book
 
